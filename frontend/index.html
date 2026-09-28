@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>上传简历</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    flex-direction: column;
+    min-height: 100vh; 
+    font-family: "Microsoft YaHei";
+    background: #fff;
+    color: #000;
+  }
+
+  /* ---------- 页面头部 ---------- */
+  .page-header { padding: 27px 0 0; }
+
+  /* ---------- 页面主体：左右两栏 ---------- */
+  .panel {
+    display: grid;
+    grid-template-columns: 0.4fr 0.6fr;
+    gap: 48px;
+    align-items: stretch;
+    min-height: calc(100vh - 27px);
+    --intro-pt: 10px;                 /* 左栏上内边距 */
+    --title-h: calc(24px * 1.35 * 2); /* 左栏标题两行高度：24px × 1.35 × 2 行 */
+  }
+
+  /* ---------- 左栏 ---------- */
+  .intro {
+    position: relative;
+    padding: var(--intro-pt) 50px 250px;
+  }
+  .intro h2 { font-size: 24px; line-height: 1.35; }
+  .intro p  { font-size: 16px; color: #9aa4b2; margin-top: 10px; line-height: 1.6; }
+
+  .art { 
+    display: block;
+    position: absolute;
+    left: 0; 
+    bottom: 0; 
+    width: 100%; 
+    }
+
+  /* ---------- 右栏：上传卡片 ---------- */
+  .upload-card {
+    position: relative;
+    /* 顶部内边距 = 左栏上内边距 + 标题高度 → dropzone 上沿对齐标题下沿 */
+    padding: calc(var(--intro-pt) + var(--title-h)) 50px 50px;
+    background: #fff;
+    border: 1px solid #e6e9ef;
+    border-radius: 14px;
+    margin-bottom: 40px;
+    margin-right: 50px;
+
+    display: flex;              
+    flex-direction: column;     
+  }
+  /* 标题脱离文档流，不再把 dropzone 往下顶 */
+  .upload-card h3 {
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    font-size: 24px;
+  }
+
+  /* 拖拽上传区 */
+  .dropzone {
+    min-height: 60vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+    cursor: pointer;
+    background: #f4f8ff;
+    border: 1px dashed #b9cdfd;
+    border-radius: 10px;
+    transition: background .2s, border-color .2s;
+  }
+  .dropzone:hover,
+  .dropzone.is-dragover { background: #e8f1ff; border-color: #2f6cf6; }
+  .dropzone img { width: 40px; height: 40px; }
+  .dropzone .hint { max-width: 220px; font-size: 11px; line-height: 1.6; color: #9aa4b2; }
+
+  /* 按钮 */
+  .actions { display: flex; gap: 12px; margin-top: 16px; }
+  .btn {
+    flex: 1;
+    padding: 10px 0;
+    border: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+  }
+  .btn-ghost   { background: #dbe7ff; color: #2f6cf6; }
+  .btn-ghost:not(:disabled):hover { background: #c9dbff; }
+  .btn-primary { background: #2f6cf6; color: #fff; }
+  .btn-primary:not(:disabled):hover { background: #245cdb; }
+  .btn:active { transform: scale(.97); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* 步骤条 */
+  .steps { display: flex; align-items: center; justify-content: center; margin-top: 20px; }
+  .steps .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #cbd5e1;
+  }
+  .steps .dot.active,
+  .steps .dot.done { background: #2f6cf6; }
+  .steps .line { width: 32px; height: 2px; background: #cbd5e1; }
+  .steps .line.done { background: #2f6cf6; }
+
+  @media (max-width: 768px) {
+    .page-header { padding: 16px 16px 0; }
+    .panel { grid-template-columns: 1fr; gap: 28px;}
+    .intro { text-align: left; margin-left: 20px; margin-right: 20px;}
+    .art { margin-left: auto; margin-right: auto; max-width: 327px; max-height: 244px;}
+    .upload-card { margin-left: 20px; margin-right: 20px; padding-top: 20px}
+    .dropzone { min-height: 10vh;}
+    .upload-card h3 { position: static; margin-bottom: 14px;}
+  }
+</style>
+</head>
+<body>
+
+  <header class="page-header">
+  </header>
+
+  <main class="panel">
+    <!-- 左栏 -->
+    <section class="intro">
+      <h2>Finish!<br>Upload Your Resume</h2>
+      <p>Upload your resume, the platform will help you parse and optimize, you can also skip this step.</p>
+
+
+
+      <img class="art" src="images/illustration.svg" alt="上传简历插画">
+    </section>
+
+    <!-- 右栏 -->
+    <section class="upload-card">
+      <h3>Upload file</h3>
+
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="点击或拖拽文件到此处上传简历">
+        <img src="images/icon-upload.svg" alt="">
+        <p class="hint" id="hint">Drag your resume file here or click on this area to select the appropriate file to upload</p>
+        <input type="file" id="fileInput" accept=".pdf,.doc,.docx" hidden="">
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" id="btnPrev" type="button">Last step</button>
+        <button class="btn btn-primary" id="btnFinish" type="button">Finish</button>
+      </div>
+
+      <div class="steps" role="progressbar" aria-label="上传进度"
+           aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+        <span class="dot active"></span>
+        <span class="line"></span>
+        <span class="dot"></span>
+        <span class="line"></span>
+        <span class="dot"></span>
+      </div>
+    </section>
+  </main>
+
+<script>
+  var dropzone  = document.getElementById('dropzone'),
+      fileInput = document.getElementById('fileInput'),
+      hint      = document.getElementById('hint'),
+      steps     = document.querySelector('.steps'),
+      dots      = document.querySelectorAll('.steps .dot'),
+      lines     = document.querySelectorAll('.steps .line'),
+      btnPrev   = document.getElementById('btnPrev'),
+      btnFinish = document.getElementById('btnFinish');
+
+  var HINT_DEFAULT = hint.textContent,
+      MAX  = dots.length - 1,   /* 最右一步的下标 */
+      step = 0,                 /* 当前步骤 0 / 1 / 2 */
+      currentFile = null;
+
+  /* 按当前 step 与文件状态刷新界面 */
+  function render() {
+    var atEnd = step >= MAX;
+
+    dots.forEach(function (d, i) {
+      d.classList.toggle('active', i === step);
+      d.classList.toggle('done', i < step);
+    });
+    lines.forEach(function (l, i) { l.classList.toggle('done', i < step); });
+    steps.setAttribute('aria-valuenow', step + 1);
+
+    btnPrev.disabled   = step === 0;                  /* 第一个步骤点：两个按钮都不可按 */
+    btnFinish.disabled = step === 0 || atEnd;         /* 第一个步骤点不可按；到最右也不可按 */
+  }
+
+  /* 记录文件；传 null 表示撤回 */
+  function setFile(file) {
+    currentFile = file || null;
+    if (currentFile) {
+      hint.textContent = '已选择：' + currentFile.name;
+      hint.style.color = '#2f6cf6';
+    } else {
+      fileInput.value = '';
+      hint.textContent = HINT_DEFAULT;
+      hint.style.color = '';
+    }
+  }
+
+  function forward() { if (step < MAX) step++; render(); }
+  function back()    { if (step > 0)   step--; render(); }
+
+  /* ---------- 点击上传区 -> 打开文件选择框 ---------- */
+  function pick() { fileInput.click(); }
+  dropzone.addEventListener('click', pick);
+  dropzone.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); }
+  });
+
+  /* ---------- 选到文件 -> 步骤右移一格 ---------- */
+  function receive(file) {
+    setFile(file);
+    if (currentFile) forward(); else render();
+  }
+  fileInput.addEventListener('change', function () { receive(this.files[0]); });
+
+  /* ---------- 拖拽上传 ---------- */
+  dropzone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    dropzone.classList.add('is-dragover');
+  });
+  dropzone.addEventListener('dragleave', function () {
+    dropzone.classList.remove('is-dragover');
+  });
+  dropzone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    dropzone.classList.remove('is-dragover');
+    receive(e.dataTransfer.files[0]);
+  });
+
+  /* ---------- 按钮 ---------- */
+  btnPrev.addEventListener('click', function () {
+    if (step === 1) setFile(null);   /* 从第 2 个点退回起点时，撤回已选文件 */
+    back();                          /* 步骤左移一格 */
+  });
+  btnFinish.addEventListener('click', forward);   /* 步骤右移一格 */
+
+  render();
+</script>
+
+
+
+</body></html>
