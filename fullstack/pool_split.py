@@ -16,6 +16,7 @@ pool_split.py —— 每日瓜分奖池的分账逻辑
   多一分 = 平台凭空多发了钱。
   少一分 = 有人的钱卡在系统里没发出去。
 """
+from decimal import Decimal
 
 
 def split_pool(pool_cents: int, weights: list[int]) -> list[int]:
@@ -26,14 +27,34 @@ def split_pool(pool_cents: int, weights: list[int]) -> list[int]:
     total = sum(weights)
     return [round(pool_cents * w / total) for w in weights]
 
+def split_pool_corrected(pool_cents: int, weights: list[int]) -> list[int]:
+    # 保护
+    if not weights or sum(weights) == 0:
+        return []
+
+    total = sum(weights)
+    # divmod 一次拿到 商 和 余数，避免浮点
+    parts = [divmod(pool_cents * w * 100, total) for w in weights] # 直接转换成”分“，分的更细更公平
+    result = [q for q, _ in parts]
+
+    diff = pool_cents * 100 - sum(result)  # 还没分出去的"分"
+    order = sorted(range(len(weights)), key = lambda i: (-parts[i][1], i)) # 按照余数排序来分剩余的”分“
+    for i in order[:diff]:
+        result[i] += 1
+    return [Decimal(f"{v // 100}.{v % 100:02d}") for v in result] # 防止再引入浮点数
+
 def is_valid(pool_cents: int, result: list[int]) -> bool:
     return sum(result) == pool_cents
 
 if __name__ == "__main__":
-    # 一个跑得通的例子：奖池 100 元，三个人权重相同
-    pool_cents = 10000
+    # simple test
+    pool_cents = 8
 
-    result = split_pool(10000, [1, 1, 1])
+    result = split_pool(pool_cents, [0])
     print(result)
-
     print(is_valid(pool_cents, result))
+
+    result_corrected = split_pool_corrected(pool_cents, result)
+    print(result_corrected)
+    print(is_valid(pool_cents, result_corrected))
+
