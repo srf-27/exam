@@ -1,0 +1,17 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+填好了，规范和巡检数据没动。
+
+**产出**
+- `检修判定表.csv` — 在原空表里逐行填入，7 台设备全填，`判定` 只用三值之一，另填了 `触发条款` 和 `判定依据`。
+- `判定说明.md` — 每台设备的判定理由、引用条款、依据数值，附汇总和报修名单。
+
+**结果**：需检修 SV-401、SV-407；无需检修 SV-402/403/405/406；不适用 SV-404。
+
+**两处需要你确认的点：**
+
+1. **SV-406 是规范的空档**。「存储专用」机柜在 4.1 里没有对应限值，而这台的额定上限列又是空的，所以严格讲 4.1 无适用限值。我按「无任何条款触发」+ 保守比较（50℃ 远低于最严的 62℃）判为**无需检修**，并在判定依据和说明里都标注了「限值缺失待确认」。如果你认为缺限值应当作别的处理（比如留空待补），告诉我我改。另外注意它同时触不到 4.2（告警 0 次）。
+
+2. **SV-401 同时触发两条**（温度 64℃>62℃ 的 4.1，告警 4 次的 4.2），触发条款我填了「4.1、4.2」。无需检修的行触发条款我写的「无」，如果你想留空或换符号（比如 `-`），说一声。
+
+顺带一提：工作区里还有一份 `_transcript.txt`，内容是 Claude Code 的模型识别告警日志（`deepseek-chat` 不在模型目录里），跟巡检判定无关，我没动它。

@@ -1,0 +1,27 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+老李，表填好了，两份东西交付：
+
+**`检修判定表.csv`**（原表直接填，9 行齐全，判定只用了值域内的三个词）
+**`判定说明.md`**（逐台说清为什么，附汇总表和跟进建议）
+
+| 设备 | 判定 | 条款 | 关键点 |
+|---|---|---|---|
+| SV-501 | 需检修 | 4.2 | 温度没超（60<62），但告警 3 次达标 |
+| SV-502 | 无需检修 | — | 温度、告警都正常 |
+| SV-503 | 需检修 | 4.1、4.2 | 75>70 且告警 3 次，两条同时命中 |
+| SV-504 | 需检修 | 4.1 | 同上温度，但告警只有 2 次 |
+| SV-505 | 无需检修 | — | 85 虽高于 GPU 机柜限值 80，但本机额定上限是 88，未超 |
+| SV-506 | 不适用 | 4.3 | 返修中，排除条款优先 |
+| SV-507 | 需检修 | 4.1、4.2 | 列空 → 按 GPU 柜 80℃ 兜底，81>80；告警 5 次 |
+| SV-508 | 无需检修 | — | 66=66，判据是「超过」，等于不算 |
+| SV-509 | 需检修 | 4.1 | 67>66，高 1℃ 也超限 |
+
+**报修重点**：5 台需检修（501/503/504/507/509）。另外提醒一句——**SV-506 判「不适用」是程序上排除，不等于设备没事**，它实际温度已经 95℃，报修时务必向厂商点明。规范和数据一个字没动。
+
+两处容易踩的地方我按规范的原话处理了，你过目：
+
+1. **机柜级限值只是兜底**，不是封顶。规范写的是「该列为空的设备，按其机柜级限值执行」——所以 SV-505 有 88℃ 就按 88℃ 判，不因为柜型限值 80℃ 而误判成需检修。
+2. **4.3 排除优先于 4.1/4.2**。SV-506 温度超限在前，但它「不纳入本次判定」，所以结论是不适用而不是需检修。
+
+如果你那边对「触发条款」栏有别的习惯（比如只填最优先的一条、或无需检修留空而不写「无」），说一声我改。

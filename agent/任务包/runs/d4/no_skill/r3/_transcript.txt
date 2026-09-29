@@ -1,0 +1,29 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+老李，填好了。`检修判定表.csv` 原地填的，每台一行；`判定说明.md` 另写了一份。规范和巡检数据只读，没动过（巡检数据仍是 8 行）。
+
+**结论：需检修 2 台（SV-407、SV-401），不适用 1 台，无需检修 4 台。**
+
+| 设备 | 判定 | 条款 | 关键数值 |
+|---|---|---|---|
+| SV-407 | **需检修** | 4.1 | 88 ℃ > 80 ℃，超限 8 ℃，**优先报修** |
+| SV-401 | **需检修** | 4.1、4.2 | 64 ℃ > 62 ℃（机柜级）**且**告警 4 次 ≥ 3 |
+| SV-402 | 无需检修 | 无 | 62 = 62，贴上限未超 |
+| SV-403 | 无需检修 | 无 | 78 < 80（GPU 柜限值） |
+| SV-404 | 不适用 | 4.3 | 厂商保修返修中 |
+| SV-405 | 无需检修 | 无 | 75 = 75 |
+| SV-406 | 无需检修 | 无（存疑） | 50 ℃，见下 |
+
+填表时按规范抠了这几处，容易判错，说明一下：
+
+- **SV-405 别用机柜级 62 ℃。** 4.1 是「该列为空的**才**按机柜级限值」；这行已填 75 ℃，就按 75 ℃ 算。若误套通用柜 62 ℃，会把 75 ℃ 当成超限 13 ℃ 误报。
+- **SV-402 / SV-405 是贴上限，不算超限。** 规范写的是「**超过**」，严格大于；等于上限不触发。
+- **SV-403 是按 GPU 柜 80 ℃。** 78 ℃ 看着高，但 A-02 是高密度 GPU 柜，对照 80 ℃ 未超；别套通用柜的 62 ℃。
+- **SV-401 是两条同时触发。** 温度只超 2 ℃ 容易漏，但告警 4 次本身就单独构成检修条件。
+- **SV-404 是真超温的。** 82 ℃ > 80 ℃，只因返修状态被 4.3 排除。
+
+**两件要你留意的：**
+
+1. **SV-406 我填了「无需检修」，但打了「存疑」标记 —— 这是推断，不是明文。** 规范 4.1 的机柜级限值只给了通用计算机柜 62 ℃ 和高密度 GPU 机柜 80 ℃，**没给「存储专用」机柜**，而 C-01 正是存储专用且额定上限为空，限值表缺项。我按「50 ℃ 低于已知最低限值 62 ℃」判的无需检修，温度余量很大、实际风险低，但依据不是规范原文。**建议报修前找规范归口部门确认存储柜限值并补进 4.1**，我没敢替你改成「不适用」——4.3 的「不适用」只针对返修中设备，套上去不合规。
+
+2. **SV-404 修完要复查。** 这台温度本已超限，仅因返修被排除；返修完成须重新巡检，不然容易长期漏检。

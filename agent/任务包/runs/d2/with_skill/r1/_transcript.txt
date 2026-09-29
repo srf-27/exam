@@ -1,0 +1,26 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+填好了。两个交付物都在工作区：
+
+**`检修判定表.csv`**（就地填写，未新建；8 行 4 列校验通过）
+
+| 设备 | 判定 | 触发条款 | 关键数值 |
+|---|---|---|---|
+| SV-201 | 无需检修 | 无 | 回退限值 62℃，温度 62℃ = 上限，未超 |
+| SV-202 | 需检修 | 4.1 | 回退限值 62℃，温度 63℃ > 62℃ |
+| SV-203 | 需检修 | 4.2 | 温度 80℃ = 上限未超，但告警 3 次 ≥ 3 |
+| SV-204 | 需检修 | 4.1；4.2 | 温度 95℃ > 90℃，告警 10 次 |
+| SV-205 | 不适用 | 4.3 | 状态「厂商保修返修中」，排除规则优先 |
+| SV-206 | 无需检修 | 无 | 温度 88℃ = 上限未超，告警 0 |
+| SV-207 | 无需检修 | 无 | 温度 71℃ < 72℃，告警 2 |
+| SV-208 | 无需检修 | 无 | 额定为空且机柜「存储专用」无对应限值，告警 0 |
+
+**`判定说明.md`** —— 逐台写明依据的条款、取到的数值、以及边界和优先级的取舍。
+
+三个需要你留意的判定点：
+
+1. **边界**：规范用「超过」「≥」，所以温度**等于**上限不算超限（SV-201、SV-203、SV-206 均卡在等号上），告警**等于** 3 次即触发（SV-203）。
+2. **优先级**：4.3 是排除规则，先于 4.1/4.2。SV-205 就算状态正常也只是「无需检修」，但状态栏直接把它踢出本次判定，判「不适用」。
+3. **SV-208 是个规范缺口**：额定上限为空要回退机柜级限值，可规范只给了通用计算 62℃ 和高密度 GPU 80℃ 两档，没有「存储专用」。该机温度 55℃ 远低于任一已知限值、告警 0 次，判「无需检修」没有问题；但现在这类设备只能靠告警条款兜底，**温度超限会漏判**。建议把存储专用机柜的限值补进规范。
+
+输入文件（规范、巡检数据）只读未动。需检修 3 台，无需检修 4 台，不适用 1 台；报修优先级建议 SV-204 > SV-202 > SV-203。

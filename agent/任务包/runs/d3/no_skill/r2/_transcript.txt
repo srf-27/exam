@@ -1,0 +1,29 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+两份文件写好了，`巡检数据.csv` 和 `设备维护规范.md` 未改动。
+
+## 判定结果
+
+| 设备 | 判定 | 条款 | 依据 |
+|---|---|---|---|
+| SV-301 | 需检修 | 4.1 | 额定列为空→通用机柜限值 62℃，实测 65℃ 超限 |
+| SV-302 | 需检修 | 4.1 | 额定 70℃，实测 72℃ 超限 |
+| SV-303 | 无需检修 | — | 69℃≤70℃，告警 1 次 |
+| SV-304 | 需检修 | 4.2 | 告警 3 次（温度 69℃ 正常，告警独立触发） |
+| SV-305 | 不适用 | 4.3 | 厂商保修返修中 |
+| SV-306 | 需检修 | 4.1 | 额定列为空→GPU 机柜限值 80℃，实测 81℃ 超限 |
+| SV-307 | 无需检修 | — | 85℃ **等于**上限未超过，告警 2 次 |
+| SV-308 | 无需检修 | — | 66℃≤68℃，告警 0 次 |
+| SV-309 | 不适用 | 4.3 | 厂商保修返修中（告警 7 次但被 4.3 排除） |
+| SV-310 | 需检修 | 4.1 | 额定 92℃，实测 99℃ 超限 |
+
+**需检修 5 台 / 无需检修 3 台 / 不适用 2 台。**
+
+几个容易踩坑的点，说明里都写清楚了：
+
+- **SV-307 是边界**：85℃ 等于额定值，4.1 要求「超过」（严格大于），不判超限。
+- **SV-304 与 SV-309 的对比**：台机器告警都达到 4.2 门槛，但 SV-304 在用→需检修，SV-309 返修中→按 4.3 排除，判不适用。4.3 的排除效力优先于 4.1/4.2。
+- **SV-301、SV-306 靠兜底判据**：两台的额定温度上限列为空，走了机柜级限值（62℃ / 80℃）。建议报修时一并核对铭牌额定值并补录该列——若实际额定值高于机柜级限值，这两台的结论需要复核。
+- **SV-310 不影响结论**：即使按 80℃ 的 GPU 机柜限值衡量，99℃ 同样超限，所以该行额定值缺失与否不改判。
+
+产出文件：`/app/检修判定表.csv`（原地填写）、`/app/判定说明.md`（新建）。

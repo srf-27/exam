@@ -1,0 +1,69 @@
+== 逐条 50 行（程序化/88 + 语义/12）==
+  runs/d1/no_skill/r1   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/no_skill/r2   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/no_skill/r3   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/no_skill/r4   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/no_skill/r5   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/with_skill/r1   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/with_skill/r2   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/with_skill/r3   P  82.7  S 12  T  94.7  失分点: G6
+  runs/d1/with_skill/r4   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d1/with_skill/r5   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d2/no_skill/r1   P  85.7  S 12  T  97.7  失分点: G6
+  runs/d2/no_skill/r2   P  80.7  S 12  T  92.7  失分点: G4、G6
+  runs/d2/no_skill/r3   P  85.7  S 12  T  97.7  失分点: G6
+  runs/d2/no_skill/r4   P  73.9  S 12  T  85.9  失分点: G4、G6
+  runs/d2/no_skill/r5   P  85.7  S 12  T  97.7  失分点: G6
+  runs/d2/with_skill/r1   P  85.7  S 12  T  97.7  失分点: G6
+  runs/d2/with_skill/r2   P  78.9  S 12  T  90.9  失分点: G6
+  runs/d2/with_skill/r3   P  85.7  S 12  T  97.7  失分点: G6
+  runs/d2/with_skill/r4   P  78.9  S 12  T  90.9  失分点: G6
+  runs/d2/with_skill/r5   P  85.7  S 12  T  97.7  失分点: G6
+  runs/d3/no_skill/r1   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/no_skill/r2   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/no_skill/r3   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/no_skill/r4   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/no_skill/r5   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/with_skill/r1   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/with_skill/r2   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/with_skill/r3   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/with_skill/r4   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d3/with_skill/r5   P  88.0  S 12  T 100.0  失分点: 无
+  runs/d4/no_skill/r1   P  83.3  S  8  T  91.3  失分点: G6、G7
+  runs/d4/no_skill/r2   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/no_skill/r3   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/no_skill/r4   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/no_skill/r5   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/with_skill/r1   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/with_skill/r2   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/with_skill/r3   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/with_skill/r4   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d4/with_skill/r5   P  85.3  S 12  T  97.3  失分点: G6
+  runs/d5/no_skill/r1   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/no_skill/r2   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/no_skill/r3   P  83.1  S 12  T  95.1  失分点: G6、G7
+  runs/d5/no_skill/r4   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/no_skill/r5   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/with_skill/r1   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/with_skill/r2   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/with_skill/r3   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/with_skill/r4   P  84.4  S 12  T  96.4  失分点: G6
+  runs/d5/with_skill/r5   P  84.4  S 12  T  96.4  失分点: G6
+
+== 失分运行按判分点归类 ==
+  G4   失分  2/50：d2/no_skill/r2  d2/no_skill/r4
+  G6   失分 31/50：d1/with_skill/r3  d2/no_skill/r1  d2/no_skill/r2  d2/no_skill/r3  d2/no_skill/r4  d2/no_skill/r5  d2/with_skill/r1  d2/with_skill/r2  d2/with_skill/r3  d2/with_skill/r4  d2/with_skill/r5  d4/no_skill/r1  d4/no_skill/r2  d4/no_skill/r3  d4/no_skill/r4  d4/no_skill/r5  d4/with_skill/r1  d4/with_skill/r2  d4/with_skill/r3  d4/with_skill/r4  d4/with_skill/r5  d5/no_skill/r1  d5/no_skill/r2  d5/no_skill/r3  d5/no_skill/r4  d5/no_skill/r5  d5/with_skill/r1  d5/with_skill/r2  d5/with_skill/r3  d5/with_skill/r4  d5/with_skill/r5
+  G7   失分  2/50：d4/no_skill/r1  d5/no_skill/r3
+
+== 逐行失分（判定/条款/依据）==
+  d1   SV-102   ✓✗✓  期望条款(空)    共  1 次
+  d1   SV-103   ✓✗✓  期望条款(空)    共  1 次
+  d2   SV-201   ✓✗✓  期望条款(空)    共  3 次
+  d2   SV-204   ✓✗✓  期望条款4.2    共 10 次
+  d2   SV-206   ✓✗✓  期望条款(空)    共  3 次
+  d2   SV-207   ✓✗✓  期望条款(空)    共  3 次
+  d4   SV-401   ✓✗✓  期望条款4.2    共  9 次
+  d4   SV-401   ✓✗✗  期望条款4.2    共  1 次
+  d5   SV-503   ✓✗✓  期望条款4.2    共 10 次
+  d5   SV-507   ✓✗✓  期望条款4.2    共  9 次
+  d5   SV-507   ✓✗✗  期望条款4.2    共  1 次

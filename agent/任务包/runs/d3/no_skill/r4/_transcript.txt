@@ -1,0 +1,21 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+表填完，`判定说明.md` 也写好了。规范和数据两个文件没动。
+
+## 判定结果（10 台）
+
+| 判定 | 台数 | 设备 |
+|---|---|---|
+| 需检修 | 5 | SV-301、SV-302、SV-304、SV-306、SV-310 |
+| 无需检修 | 3 | SV-303、SV-307、SV-308 |
+| 不适用 | 2 | SV-305、SV-309 |
+
+## 几个需要你把关的点
+
+- **SV-301、SV-306 的额定上限是空的**，按 4.1 走了机柜级限值：分别取通用计算柜 62 ℃、高密度 GPU 柜 80 ℃。这两台的判定完全取决于这个兜底规则，建议报修前跟班组确认一下取值方式。
+- **SV-304 是告警超限、温度正常**（69 ℃ < 70 ℃，但 24h 告警正好 3 次），归"需检修"。报修工单里按告警类问题描述，别写成过温。
+- **SV-309 是唯一被 4.3 挡下来的重点**：24h 告警 7 次，按 4.2 本该判需检修，但状态是"厂商保修返修中"，按 4.3 优先判"不适用"。这台别漏，要转保修流程。
+- **SV-307 是临界值**：85 ℃ 刚好等于额定上限 85 ℃，我把 4.1 的"超过"按严格大于处理，判"无需检修"。如果你们内部口径是"达到即算超限"，这台要改判——**这是全表唯一一处口径歧义**，请确认。
+- SV-305 温度、告警都正常，但因保修返修中同样判"不适用"，不当作"无需检修"出结论。
+
+`判定依据` 列里写的就是触发的条款号 + 关键数值；详细的逐台理由和报修提示都在 `判定说明.md`。

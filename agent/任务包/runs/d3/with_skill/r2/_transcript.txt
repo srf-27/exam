@@ -1,0 +1,31 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+老李，填好了。两份产出：
+
+- **`检修判定表.csv`**（在现成空表上填的，未新建）：10 台设备，每行含 `判定 / 触发条款 / 判定依据`，结论只用规定三值。
+- **`判定说明.md`**：规则顺序 + 逐台理由。
+
+**结果一览**
+
+| 设备 | 判定 | 条款 | 关键点 |
+|---|---|---|---|
+| SV-301 | 需检修 | 4.1 | 上限空 → 通用柜 62℃，65>62 |
+| SV-302 | 需检修 | 4.1 | 72>70 |
+| SV-303 | 无需检修 | — | 69≤70，告警1 |
+| SV-304 | 需检修 | 4.2 | 告警3≥3 |
+| SV-305 | 不适用 | 4.3 | 返修中，排除 |
+| SV-306 | 需检修 | 4.1 | 上限空 → GPU柜 80℃，81>80 |
+| SV-307 | 无需检修 | — | 85 未“超过”85，告警2 |
+| SV-308 | 无需检修 | — | 66≤68，告警0 |
+| SV-309 | 不适用 | 4.3 | 返修中，排除（告警7本应触发4.2） |
+| SV-310 | 需检修 | 4.1 | 99>92 |
+
+**三个易错点，报修前留意**（都写进说明里了）：
+
+1. **缺省列**：SV-301/305/306 的「额定温度上限」为空，不是跳过，而是**按其机柜用途取限值**（通用 62 / GPU 80）。
+2. **优先级**：SV-309 告警 7 次本该触发 4.2，但状态是返修中，4.3「不纳入本次判定」优先 → 判**不适用**，不是需检修。SV-305 同理。
+3. **严格大于**：4.1 措辞是「超过」，SV-307 温度 85℃ 恰好等于上限 85℃，**不算超限**，判无需检修。
+
+`巡检数据.csv` 与 `设备维护规范.md` 均只读未动（校验过）。
+
+一个提醒：工作区里**没有随附判定示例/样表**，所以 SKILL 的第二轮「用示例反推顺序」这一环我没有样例可代，改用数据里 SV-305、SV-309 两条冲突行 + 规范原文措辞来确认 **4.3 优先**。若你手头另有官方判定样例，发我一下，我再拿它回归校验一遍顺序是否一致。

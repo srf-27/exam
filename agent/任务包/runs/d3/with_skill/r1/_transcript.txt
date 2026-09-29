@@ -1,0 +1,23 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+已按 skill 的三轮做法完成。校验通过：`检修判定表.csv` 11 行、每行 4 列、`判定` 列只出现「需检修／无需检修／不适用」三个值；输入文件未改动。
+
+**结果汇总（共 10 台）**
+
+| 判定 | 设备 |
+| --- | --- |
+| 需检修（5） | SV-301、SV-302、SV-304、SV-306、SV-310 |
+| 无需检修（3） | SV-303、SV-307、SV-308 |
+| 不适用（2） | SV-305、SV-309 |
+
+**两个关键判定点，报修前请留意：**
+
+- **SV-309 判「不适用」而非「需检修」**——它 24h 告警 7 次，本已满足 4.2（≥3 次），但状态是「厂商保修返修中」。4.3 明写「不纳入本次判定」，排除优先，所以不报修。
+- **SV-307 判「无需检修」**——运行温度 85℃ 正好等于额定上限 85℃。规范用「超过」，等于不算超，不触发 4.1；告警 2 次也不够。属边界值。
+
+**两处需你确认的口径**（都写进了 `判定说明.md`）：
+
+1. 工作区里**没有示例文件**（`_transcript.txt` 只是环境日志），skill 的第二轮「用示例反推判定顺序」无例可依。我据规范 4.3 的排除措辞和 4.2 的「无论温度是否超限」定的优先级。若你手头有原始示例，给我一份我可以复核顺序。
+2. 判定顺序中我把 **4.3 排除放在最前**。若你们惯例是 4.2 优先（即返修中也要先报），结果里只有 SV-309 会变成「需检修」，其余不变。
+
+依据栏里，空白的额定温度上限我都标注了「按机柜级限值回退」（SV-301 取 62℃、SV-306 取 80℃），这份数据里这类行恰好都触发了 4.1。

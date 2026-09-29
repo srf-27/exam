@@ -1,0 +1,24 @@
+"deepseek-chat" isn't described by this version's model catalog; update Claude Code, or map it with behavesAs on a modelPicker row (or modelOverrides, if it is a provider id of a model this version knows). Until then auto-compact keeps this session within 200k tokens (the context window it assumes); if the model accepts more, append [1m] to the model name for 1M, or set CLAUDE_CODE_MAX_CONTEXT_TOKENS to its real window; CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 restores the previous wait-for-the-API behavior.
+[claude-code:unrecognized_model] {"model":"deepseek-chat","query_source":"sdk"}
+填好了，两份文件都在工作区：
+
+**`检修判定表.csv`**（沿用原表，未新建）
+
+| 设备 | 判定 | 条款 | 依据 |
+|---|---|---|---|
+| SV-101 | 需检修 | 4.1 | 上限为空→通用机柜62℃，实测64℃ |
+| SV-102 | 无需检修 | — | 实测70℃＝上限70℃；告警1次 |
+| SV-103 | 无需检修 | — | 上限为空→GPU机柜80℃，实测79℃ |
+| SV-104 | 需检修 | 4.1 | 实测90℃＞上限85℃ |
+| SV-105 | 需检修 | 4.2 | 告警5次≥3次 |
+| SV-106 | 不适用 | 4.3 | 厂商保修返修中 |
+
+**`判定说明.md`**：逐台写了判定过程、关键数值和报修建议。
+
+三个容易踩的点，说明一下我为什么这么判：
+
+1. **SV-101 / SV-103 上限为空**：规范 4.1 明确「该列为空的按机柜级限值执行」，所以 SV-101 用通用计算机柜 62℃（而不是"无上限、无需检修"），SV-103 用高密度 GPU 机柜 80℃。
+2. **SV-102 实测 70℃、上限 70℃**：规范用词是「超过」，按严格大于处理，等于不算超限 → 无需检修。这一条如果按「≥」判就会变成需检修，回报修前你可以确认下口径。
+3. **SV-105 温度正常但告警 5 次**：触发 4.2，条款写明"无论温度是否超限"，所以仍需检修；SV-106 按 4.3 优先判不适用，其 80℃/2 次告警只留档、不作判据。
+
+最终报修名单是 **SV-101、SV-104、SV-105** 三台。规范和巡检数据两份原文件均未改动。
