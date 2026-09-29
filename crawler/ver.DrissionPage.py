@@ -8,9 +8,8 @@ from concurrent.futures import ThreadPoolExecutor
 from DrissionPage import ChromiumOptions, ChromiumPage
 from tqdm import trange
 
-START_URL = "https://mitadmissions.org/blogs/"
-PAGES = 10        # 目标页数
-WORKERS = 4     # 详情页并发 tab 数，网络好可加到 6~8
+
+WORKERS = 1     # 详情页并发 tab 数，网络好可加到 6~8
 
 CHROME_PATH = r"C:\Program Files\Google\Chrome\Application\chrome.exe"  # 可删，DrissionPage 可 自动找
 USER_DATA = r"dp_profile"  # 独立 profile 目录，避免污染日常浏览器
@@ -174,6 +173,8 @@ def save_data_to_csv(data, filename='data.csv'):
 
 if __name__ == '__main__':
     data = []
+    START_URL = "https://mitadmissions.org/blogs/"
+    PAGES = 1  # 目标页数
     scrape_multi_pages(data, START_URL, pages=PAGES)
     save_data_to_csv(data,filename='data_DrissionPage.csv')
     print(f"共 {len(data)} 条，已保存到 data_DrissionPage.csv")
